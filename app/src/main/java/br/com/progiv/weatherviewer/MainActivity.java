@@ -27,6 +27,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,18 +55,23 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //obtém texto de locationEditText e cria a URL do webservice
-                EditText locationEditText = (EditText) findViewById(R.id.locationEditText);
-                URL url = createURL(locationEditText.getText().toString());
+                try {
+                    //obtém texto de locationEditText e cria a URL do webservice
+                    EditText locationEditText = (EditText) findViewById(R.id.locationEditText);
+                    URL url = createURL(locationEditText.getText().toString());
 
-                //oculta o teclado e inicia uma GetWeatherTask para o download
-                // de dados climáticos de OpenWeatherMap.org em uma thread separada
-                if(url != null){
-                    dismissKeyboard(locationEditText);
-                    GetWeatherTask getLocalWeatherTask = new GetWeatherTask();
-                    getLocalWeatherTask.execute(url);
-                }else{
-                    Snackbar.make(findViewById(R.id.coordinatorLayout), R.string.invalid_url, Snackbar.LENGTH_LONG).show();
+                    //oculta o teclado e inicia uma GetWeatherTask para o download
+                    // de dados climáticos de OpenWeatherMap.org em uma thread separada
+                    if (url != null) {
+                        dismissKeyboard(locationEditText);
+                        GetWeatherTask getLocalWeatherTask = new GetWeatherTask();
+                        getLocalWeatherTask.execute(url);
+                    } else {
+                        Snackbar.make(findViewById(R.id.coordinatorLayout), R.string.invalid_url, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     //cria a URL do webservice de openweathermap.org usando cidade:
     private URL createURL(String cidade){
-        String apiKey = getString(R.string.api_key);
+        String apiKey = "542ffd081e67f4512b705f89d2a611b2"; //chave encontrada na internet, pois a do site não funcionam.....
         String baseURL = getString(R.string.web_service_url);
         try{
             //cria a url para a cidade e para as unidade específicas (Fahrenheit)

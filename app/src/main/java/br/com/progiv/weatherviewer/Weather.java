@@ -20,11 +20,15 @@ public class Weather {
         numberFormat.setMaximumFractionDigits(0);
 
         this.dayOfWeek = convertTimeStampToDay(timeStamp);
-        this.minTemp = numberFormat.format(minTemp) + "\u00B0F";
-        this.maxTemp = numberFormat.format(maxTemp) + "\u00B0F";
+        this.minTemp = numberFormat.format(convertFahrenheitCelcius(minTemp)) + "\u00B0C";
+        this.maxTemp = numberFormat.format(convertFahrenheitCelcius(maxTemp)) + "\u00B0C";
         this.humidity = NumberFormat.getPercentInstance().format(humidity / 100.0);
         this.description = description;
         this.iconURL = "http://openweathermap.org/img/w/" + iconName + ".png";
+    }
+
+    private double convertFahrenheitCelcius(double temp) {
+        return (5.0 / 9.0) * (temp - 32.0);
     }
 
     private static String convertTimeStampToDay(long timeStamp){
